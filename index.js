@@ -42,7 +42,6 @@ db.serialize(() => {
     }, () => console.log(tbl.toString())
   )
 
-  // 4. Provide a query showing only the Employees who are Sales Agents.
   const tbl4 = new Table({ head: ['Name'] , style : { compact : true } })
 
   db.each(`
