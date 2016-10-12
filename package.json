@@ -1,0 +1,23 @@
+{
+  "name": "sql_classwork",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lathammatt/sql_classwork.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lathammatt/sql_classwork/issues"
+  },
+  "homepage": "https://github.com/lathammatt/sql_classwork#readme",
+  "dependencies": {
+    "sqlite3": "^3.1.6"
+  }
+}
