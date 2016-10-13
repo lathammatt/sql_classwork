@@ -1,7 +1,7 @@
 'use strict';
 
-const { Database } = require('sqlite3').verbose();
-const db = new Database('db/Chinook_Sqlite.sqlite')
+// const { Database } = require('sqlite3').verbose();
+// const db = new Database('db/Chinook_Sqlite.sqlite')
 const Table = require('cli-table')
 
 // db.serialize(() => {
@@ -56,27 +56,30 @@ const Table = require('cli-table')
 // db.close()
 
 const knex = require('knex')({
-  client: 'sqlite3',
-  connection: {
-    filename: 'db/Chinook_Sqlite.sqlite',
-  },
-  useNullAsDefault: true,
+  client: 'pg',
+  connection:'postgres://localhost:5432/chinook',
+  // useNullAsDefault: true,
 })
 
 knex('Invoice').distinct('BillingCountry').orderBy('BillingCountry').then(console.log)
 
 knex('Invoice').where('BillingCountry', 'Brazil').then(console.log)
 
-knex('Invoice').select('Invoice.Invoiceid').select(knex.raw('Employee.FirstName || " " || Employee.LastName AS "FullName"')).join('Customer', 'Invoice.CustomerId', 'Customer.Customerid').join('Employee', 'Customer.SupportRepId', 'Employee.Employeeid').then(console.log)
+knex('Invoice')
+  .select(knex.raw(`"Employee"."FirstName" || ' ' || "Employee"."LastName" as SalesAgent`))
+  .select('Invoice.*')
+  .join('Customer', 'Invoice.CustomerId', 'Customer.CustomerId')
+  .join('Employee', 'SupportRepId', 'EmployeeId')
+  .then(console.log)
 
 knex('Invoice')
-  .select(knex.raw('Customer.FirstName || " " || Customer.LastName AS "Customer Name"'))
+  .select(knex.raw(`"Customer"."FirstName" || ' ' || "Customer"."LastName" AS "Customer Name"`))
   .select('Customer.Country')
-  .select(knex.raw('Employee.FirstName || " " || Employee.LastName AS "Employee Name"'))
-  .join('Customer', 'Invoice.CustomerId', 'Customer.Customerid')
-  .join('Employee', 'Customer.SupportRepId', 'Employee.Employeeid')
+  .select(knex.raw(`"Employee"."FirstName" || ' ' || "Employee"."LastName" AS "Employee Name"`))
+  .join('Customer', 'Invoice.CustomerId', 'Customer.CustomerId')
+  .join('Employee', 'Customer.SupportRepId', 'Employee.EmployeeId')
   .sum('Invoice.Total as Total')
-  .groupBy('Customer.FirstName')
+  .groupBy("Customer.CustomerId", "Employee.FirstName", "Employee.LastName")
   .then(console.log)
 
 
