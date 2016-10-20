@@ -61,6 +61,13 @@ const knex = require('knex')({
   // useNullAsDefault: true,
 })
 
+// const knex = require('knex')({
+//   client: 'sqlite3',
+//   connection: {
+//     filename: 'db/Chinook_Sqlite.sqlite',
+//   },
+// })
+
 knex('Invoice').distinct('BillingCountry').orderBy('BillingCountry').then(console.log)
 
 knex('Invoice').where('BillingCountry', 'Brazil').then(console.log)
